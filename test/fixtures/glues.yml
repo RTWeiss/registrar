@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  ipv4: MyString
+  ipv6: MyString
+
+two:
+  name: MyString
+  ipv4: MyString
+  ipv6: MyString
