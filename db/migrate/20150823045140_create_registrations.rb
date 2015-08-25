@@ -13,10 +13,9 @@ class CreateRegistrations < ActiveRecord::Migration
       t.string :postal_code
       t.string :email
       t.string :phone_number
-      t.references :domain, index: true, foreign_key: true
-      t.string :type
 
-      t.timestamps null: false
+      t.string :type
+      t.references :domain, index: true, foreign_key: true
     end
   end
 end

@@ -1,3 +1,3 @@
 class Technical < Registration
-  belongs_to :domain
+  belongs_to :domain, foreign_key: 'domain_id'
 end

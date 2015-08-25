@@ -1,0 +1,60 @@
+<%= form_for @domain do |domain| %>
+  <% if @domain.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@domain.errors.count, "error") %> prohibited this domain from being saved:</h2>
+
+      <ul>
+      <% @domain.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="actions">
+    <div class="text field">
+      <%= domain.label :name, "Domain Name" %>
+      <%= domain.text_field :name %>
+    </div>
+
+    <div class="radio field">
+      Transfer Lock
+      <%= domain.radio_button :lock, true %>
+      <%= domain.label :lock_true, "Enabled" %>
+      <%= domain.radio_button :lock, false %>
+      <%= domain.label :lock_false, "Disabled" %>
+    </div>
+
+    <div class="radio field">
+      WHOIS Privacy
+      <%= domain.radio_button :privacy, true %>
+      <%= domain.label :privacy_true, "Enabled" %>
+      <%= domain.radio_button :privacy, false %>
+      <%= domain.label :privacy_false, "Disabled" %>
+    </div>
+
+    <%= fields_for @domain.owner do |owner| %>
+      <h2>Owner</h2>
+      <%= render 'whois', whois: owner %>
+    <% end %>
+
+    <%= fields_for @domain.administrator do |administrator| %>
+      <h2>Administrator</h2>
+      <%= render 'whois', whois: administrator %>
+    <% end %>
+
+    <%= fields_for @domain.billing do |billing| %>
+      <h2>Billing</h2>
+      <%= render 'whois', whois: billing %>
+    <% end %>
+
+    <%= fields_for @domain.technical do |technical| %>
+      <h2>Technical</h2>
+      <%= render 'whois', whois: technical %>
+    <% end %>
+
+    <div class="button field">
+      <%= domain.button %>
+    </div>
+  </div>
+<% end %>

@@ -5,7 +5,6 @@ class CreateDomains < ActiveRecord::Migration
       t.boolean :lock
       t.boolean :privacy
       t.string :epp
-
       t.timestamps null: false
     end
   end

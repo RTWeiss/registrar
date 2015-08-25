@@ -4,8 +4,6 @@ class CreateGlues < ActiveRecord::Migration
       t.string :name
       t.string :ipv4
       t.string :ipv6
-
-      t.timestamps null: false
     end
   end
 end
