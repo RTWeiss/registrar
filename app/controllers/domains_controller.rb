@@ -1,28 +1,21 @@
 class DomainsController < ApplicationController
   before_action :set_domain, only: [:show, :edit, :update, :destroy]
 
-  # GET /domains
-  # GET /domains.json
   def index
     @domains = Domain.all
   end
 
-  # GET /domains/1
-  # GET /domains/1.json
   def show
+    render xml: @domain
   end
 
-  # GET /domains/new
   def new
     @domain = Domain.new
   end
 
-  # GET /domains/1/edit
   def edit
   end
 
-  # POST /domains
-  # POST /domains.json
   def create
     @domain = Domain.new(domain_params)
 
@@ -51,8 +44,6 @@ class DomainsController < ApplicationController
     end
   end
 
-  # DELETE /domains/1
-  # DELETE /domains/1.json
   def destroy
     @domain.destroy
     respond_to do |format|
@@ -62,13 +53,10 @@ class DomainsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_domain
       @domain = Domain.find_by(name: params[:name])
-      binding.pry
     end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
     def domain_params
       params.require(:domain).permit(:name, :lock, :privacy, :epp)
     end

@@ -19,4 +19,8 @@ class Domain < ActiveRecord::Base
   def to_param
     self.name
   end
+
+  def to_xml(options)
+    super(include: [:owner, :administrator, :billing, :technical])
+  end
 end
