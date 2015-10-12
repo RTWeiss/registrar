@@ -16,7 +16,7 @@ class Domain < ActiveRecord::Base
     end
   end
 
-  # after_find do |domain|
-  #   domain.owner = Owner.where(domain: domain)
-  # end
+  def to_param
+    self.name
+  end
 end
