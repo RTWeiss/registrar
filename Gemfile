@@ -15,6 +15,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'unicorn'
 # gem 'capistrano-rails', group: :development
 gem 'opensrs', '~> 0.3.6'
+gem 'figaro'
 
 group :development, :test do
   gem 'byebug'
