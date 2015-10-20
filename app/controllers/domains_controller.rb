@@ -6,11 +6,31 @@ class DomainsController < ApplicationController
   end
 
   def show
-    render xml: @domain
   end
 
   def new
     @domain = Domain.new
+
+    # sample data used for testing purposes
+    whois_record = {
+      organization: Faker::Company.name,
+      first_name: Faker::Name.first_name,
+      last_name: Faker::Name.last_name,
+      address1: Faker::Address.street_address,
+      address2: Faker::Address.secondary_address,
+      city: Faker::Address.city,
+      state: Faker::Address.state_abbr,
+      country: "US",
+      postal_code: Faker::Address.postcode,
+      email: Faker::Internet.email,
+      phone_number: Faker::PhoneNumber.phone_number
+    }
+
+    @domain.name = Faker::Internet.domain_word + ".com"
+    @domain.owner = Owner.new(whois_record)
+    @domain.administrator = Administrator.new(whois_record)
+    @domain.technical = Technical.new(whois_record)
+    @domain.billing = Billing.new(whois_record)
   end
 
   def edit

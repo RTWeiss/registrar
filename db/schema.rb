@@ -18,44 +18,38 @@ ActiveRecord::Schema.define(version: 20150823045331) do
 
   create_table "domains", force: :cascade do |t|
     t.string   "name"
-    t.boolean  "lock"
-    t.boolean  "privacy"
+    t.boolean  "lock",       default: true
+    t.boolean  "privacy",    default: true
     t.string   "epp"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
   end
 
   create_table "glues", force: :cascade do |t|
-    t.string   "name"
-    t.string   "ipv4"
-    t.string   "ipv6"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "name"
+    t.string "ipv4"
+    t.string "ipv6"
   end
 
   create_table "nameservers", force: :cascade do |t|
-    t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string "name"
   end
 
   create_table "registrations", force: :cascade do |t|
-    t.string   "organization"
-    t.string   "first_name"
-    t.string   "last_name"
-    t.string   "address1"
-    t.string   "address2"
-    t.string   "address3"
-    t.string   "city"
-    t.string   "state"
-    t.string   "country"
-    t.string   "postal_code"
-    t.string   "email"
-    t.string   "phone_number"
-    t.integer  "domain_id"
-    t.string   "type"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.string  "organization"
+    t.string  "first_name"
+    t.string  "last_name"
+    t.string  "address1"
+    t.string  "address2"
+    t.string  "address3"
+    t.string  "city"
+    t.string  "state"
+    t.string  "country"
+    t.string  "postal_code"
+    t.string  "email"
+    t.string  "phone_number"
+    t.string  "type"
+    t.integer "domain_id"
   end
 
   add_index "registrations", ["domain_id"], name: "index_registrations_on_domain_id", using: :btree

@@ -33,25 +33,33 @@
       <%= domain.label :privacy_false, "Disabled" %>
     </div>
 
-    <%= fields_for @domain.owner do |owner| %>
-      <h2>Owner</h2>
-      <%= render 'whois', whois: owner %>
-    <% end %>
+    <div class="whois owner">
+      <%= fields_for @domain.owner do |owner| %>
+        <h2>Owner</h2>
+        <%= render 'whois', whois: owner %>
+      <% end %>
+    </div>
 
-    <%= fields_for @domain.administrator do |administrator| %>
-      <h2>Administrator</h2>
-      <%= render 'whois', whois: administrator %>
-    <% end %>
+    <div class="whois admin">
+      <%= fields_for @domain.administrator do |administrator| %>
+        <h2>Administrator</h2>
+        <%= render 'whois', whois: administrator %>
+      <% end %>
+    </div>
 
-    <%= fields_for @domain.billing do |billing| %>
-      <h2>Billing</h2>
-      <%= render 'whois', whois: billing %>
-    <% end %>
+    <div class="whois billing">
+      <%= fields_for @domain.billing do |billing| %>
+        <h2>Billing</h2>
+        <%= render 'whois', whois: billing %>
+      <% end %>
+    </div>
 
-    <%= fields_for @domain.technical do |technical| %>
-      <h2>Technical</h2>
-      <%= render 'whois', whois: technical %>
-    <% end %>
+    <div class="whois tech">
+      <%= fields_for @domain.technical do |technical| %>
+        <h2>Technical</h2>
+        <%= render 'whois', whois: technical %>
+      <% end %>
+    </div>
 
     <div class="button field">
       <%= domain.button %>

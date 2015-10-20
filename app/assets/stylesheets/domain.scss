@@ -1,0 +1,6 @@
+.whois {
+  @include span-columns(3 of 12);
+  &:nth-child(4n-1) {
+    @include omega;
+  }
+}

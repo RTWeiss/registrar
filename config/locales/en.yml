@@ -21,3 +21,8 @@
 
 en:
   hello: "Hello world"
+  helpers:
+    submit:
+      domain:
+        create: "Register Domain Name"
+        update: "Update Domain Settings"

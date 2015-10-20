@@ -1,0 +1,17 @@
+@import 'normalize';
+@import 'bourbon';
+@import 'base/base';
+@import 'neat';
+
+section.container {
+  @include outer-container;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
+h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+@import 'domain';

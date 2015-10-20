@@ -13,6 +13,8 @@ The purpose of the application is to allow to a domain name registrant to allow 
 ## Components
 
 - [ActiveMerchant](https://rubygems.org/gems/activemerchant) gem to connect to a payment gateway for orders placed through the app
-- [Cocoon](https://rubygems.org/gems/cocoon) for nested forms, to add glue records and nameservers
+- [OpenSRS](https://rubygems.org/gems/opensrs) to abstract the OpenSRS XML API into Ruby code.
 - [Devise](https://rubygems.org/gems/devise) to create a user authentication system
 - [CanCanCan](https://rubygems.org/gems/cancancan) used to create user permissions
+- [Bourbon](https://rubygems.org/gems/bourbon) is a set of SCSS mixins to assist in CSS layouts.
+- [Neat](https://rubygems.org/gems/bourbon) a lightweight grid system built on the Bourbon framework.
