@@ -11,7 +11,6 @@ class DomainsController < ApplicationController
   def new
     @domain = Domain.new
 
-    # sample data used for testing purposes
     whois_record = {
       organization: Faker::Company.name,
       first_name: Faker::Name.first_name,
@@ -39,15 +38,22 @@ class DomainsController < ApplicationController
   def create
     @domain = Domain.new(domain_params)
 
-    respond_to do |format|
-      if @domain.save
-        format.html { redirect_to @domain, notice: 'Domain was successfully created.' }
-        format.json { render :show, status: :created, location: @domain }
-      else
-        format.html { render :new }
-        format.json { render json: @domain.errors, status: :unprocessable_entity }
-      end
-    end
+    @domain.owner         = Owner.new contact_params("owner")
+    @domain.administrator = Administrator.new contact_params("administrator")
+    @domain.billing       = Billing.new contact_params("billing")
+    @domain.technical     = Technical.new contact_params("technical")
+
+    render json: @domain.to_json(include: [:owner, :administrator, :billing, :technical])
+
+    # respond_to do |format|
+    #   if @domain.save
+    #     format.html { redirect_to @domain, notice: 'Domain was successfully created.' }
+    #     format.json { render :show, status: :created, location: @domain }
+    #   else
+    #     format.html { render :new }
+    #     format.json { render json: @domain.errors, status: :unprocessable_entity }
+    #   end
+    # end
   end
 
   # PATCH/PUT /domains/1
@@ -79,5 +85,12 @@ class DomainsController < ApplicationController
 
     def domain_params
       params.require(:domain).permit(:name, :lock, :privacy, :epp)
+    end
+
+    def contact_params(type)
+      params.require(type.underscore.to_sym).permit(
+        :organization, :first_name, :last_name, :address1, :address2, :address3,
+        :city, :state, :country, :postal_code, :email, :phone_number, :type
+      )
     end
 end
