@@ -41,9 +41,9 @@
     </div>
 
     <div class="whois admin">
-      <%= fields_for @domain.administrator do |administrator| %>
+      <%= fields_for @domain.admin do |admin| %>
         <h2>Administrator</h2>
-        <%= render 'whois', whois: administrator %>
+        <%= render 'whois', whois: admin %>
       <% end %>
     </div>
 
@@ -55,9 +55,9 @@
     </div>
 
     <div class="whois tech">
-      <%= fields_for @domain.technical do |technical| %>
+      <%= fields_for @domain.tech do |tech| %>
         <h2>Technical</h2>
-        <%= render 'whois', whois: technical %>
+        <%= render 'whois', whois: tech %>
       <% end %>
     </div>
 
