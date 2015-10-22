@@ -6,6 +6,22 @@ class DomainsController < ApplicationController
   end
 
   def show
+    @domain.epp = get_epp_code @domain if @domain.epp.nil? || @domain.epp.empty?
+
+    results = query @domain
+
+    if results.success?
+      contacts = results.response['attributes']['contact_set']
+
+      @domain.owner.from_json(contacts['owner'])
+      @domain.admin.from_json(contacts['admin'])
+      @domain.billing.from_json(contacts['billing'])
+      @domain.tech.from_json(contacts['tech'])
+
+      render json: @domain
+    end
+
+    # render json: results
   end
 
   def new
@@ -30,8 +46,6 @@ class DomainsController < ApplicationController
     @domain.admin     = Admin.new registration
     @domain.billing   = Billing.new registration
     @domain.tech      = Tech.new registration
-
-
   end
 
   def edit
@@ -49,11 +63,10 @@ class DomainsController < ApplicationController
       registration = register(@domain)
       response = registration.response['response_text']
       if registration.success?
-        binding.pry
+        @domain.epp = get_epp_code @domain
         @domain.save
-        redirect_to domain_url(@domain), notice: response
+        redirect_to domain_url @domain, notice: response
       else
-        binding.pry
         render :new, alert: response
       end
     else
@@ -113,6 +126,23 @@ class DomainsController < ApplicationController
           reg_username:         'example',
           reg_password:         'example123',
         }
+      )
+    end
+
+    def get_epp_code(domain)
+      query = server.call(
+        action: 'GET',
+        object: 'DOMAIN',
+        attributes: { domain: domain.name, type: 'domain_auth_info' }
+      )
+      query.response['attributes']['domain_auth_info']
+    end
+
+    def query(domain)
+      query = server.call(
+        action: 'GET',
+        object: 'DOMAIN',
+        attributes: { domain: domain.name, type: 'all_info' }
       )
     end
 end

@@ -1,24 +1,13 @@
 <h1>Listing Domains</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th colspan="4"></th>
-    </tr>
-  </thead>
+<hr>
 
-  <tbody>
-    <% @domains.each do |domain| %>
-      <tr>
-        <td><%= domain.name %></td>
-        <td><%= link_to 'Show', domain %></td>
-        <td><%= link_to 'Edit', edit_domain_path(domain) %></td>
-        <td><%= link_to 'Destroy', domain, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<ul>
+  <% @domains.each do |domain| %>
+    <li><%= link_to domain.name, domain %></li>
+  <% end %>
+</ul>
 
-<br>
+<hr>
 
 <%= link_to 'New Domain', new_domain_path %>
