@@ -11,17 +11,29 @@ class DomainsController < ApplicationController
     results = query @domain
 
     if results.success?
-      contacts = results.response['attributes']['contact_set']
+      response = results.response['attributes']
+      contacts = response['contact_set']
+
+      # this method is always saving new nameservers in the database rather than
+      # updating the existing nameservers for that domain name.
+
+      # this should be updated to update existing nameservers rather than create new
+      # nameservers instead
+
+      @domain.nameservers = response['nameserver_list'].map do |ns|
+        Nameserver.new(name: ns['name'], order: ns['sortorder'], ip_address: ns['ipaddress'])
+      end
+
+      @domain.registration = DateTime.parse(response['registry_createdate'])
+      @domain.expiry = DateTime.parse(response['registry_expiredate'])
 
       @domain.owner.from_json(contacts['owner'])
       @domain.admin.from_json(contacts['admin'])
       @domain.billing.from_json(contacts['billing'])
       @domain.tech.from_json(contacts['tech'])
 
-      render json: @domain
+      @domain.save
     end
-
-    # render json: results
   end
 
   def new

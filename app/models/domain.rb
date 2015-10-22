@@ -1,5 +1,5 @@
 class Domain < ActiveRecord::Base
-  has_many :nameserver
+  has_many :nameservers
   has_many :glue
 
   has_one :owner
@@ -21,10 +21,10 @@ class Domain < ActiveRecord::Base
   end
 
   def to_xml(options = {})
-    super include: [ :owner, :admin, :billing, :tech ]
+    super include: [ :owner, :admin, :billing, :tech, :nameservers ]
   end
 
   def as_json(options = {})
-    super include: [ :owner, :admin, :billing, :tech ]
+    super include: [ :owner, :admin, :billing, :tech, :nameservers ]
   end
 end

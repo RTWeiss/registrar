@@ -11,18 +11,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150823045331) do
+ActiveRecord::Schema.define(version: 20151022190827) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "domains", force: :cascade do |t|
     t.string   "name"
-    t.boolean  "lock",       default: true
-    t.boolean  "privacy",    default: true
+    t.boolean  "lock",         default: true
+    t.boolean  "privacy",      default: true
     t.string   "epp"
-    t.datetime "created_at",                null: false
-    t.datetime "updated_at",                null: false
+    t.datetime "created_at",                  null: false
+    t.datetime "updated_at",                  null: false
+    t.datetime "registration"
+    t.datetime "expiry"
   end
 
   create_table "glues", force: :cascade do |t|
@@ -32,8 +34,13 @@ ActiveRecord::Schema.define(version: 20150823045331) do
   end
 
   create_table "nameservers", force: :cascade do |t|
-    t.string "name"
+    t.string  "name"
+    t.integer "order"
+    t.string  "ip_address"
+    t.integer "domain_id"
   end
+
+  add_index "nameservers", ["domain_id"], name: "index_nameservers_on_domain_id", using: :btree
 
   create_table "registrations", force: :cascade do |t|
     t.string  "organization"
@@ -54,5 +61,6 @@ ActiveRecord::Schema.define(version: 20150823045331) do
 
   add_index "registrations", ["domain_id"], name: "index_registrations_on_domain_id", using: :btree
 
+  add_foreign_key "nameservers", "domains"
   add_foreign_key "registrations", "domains"
 end

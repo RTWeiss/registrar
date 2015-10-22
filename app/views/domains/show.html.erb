@@ -2,6 +2,14 @@
   <h1><%= @domain.name %></h1>
 
   <ul class="properties">
+    <li class="registration date">
+        <strong>Registration Date:</strong>
+        <%= @domain.registration.strftime('%B %d, %Y') %>
+    </li>
+    <li class="expiry date">
+        <strong>Expiry Date:</strong>
+        <%= @domain.expiry.strftime('%B %d, %Y') %>
+    </li>
     <li class="lock">
       <strong>Transfer Lock</strong>
       <%= @domain.lock ? "On" : "Off" %>
@@ -13,6 +21,14 @@
     <li>
       <strong>Authorization Code</strong>
       <%= @domain.epp %>
+    </li>
+    <li>
+      <strong>Nameservers</strong>
+      <ul>
+        <% @domain.nameservers.each do |ns| %>
+          <li><%= ns.name %></li>
+        <% end %>
+      </ul>
     </li>
   </ul>
 </div>
