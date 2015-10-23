@@ -36,28 +36,28 @@
     <div class="whois owner">
       <%= fields_for @domain.owner do |owner| %>
         <h2>Owner</h2>
-        <%= render 'whois', whois: owner %>
+        <%= render 'whois_form', whois: owner %>
       <% end %>
     </div>
 
     <div class="whois admin">
       <%= fields_for @domain.admin do |admin| %>
         <h2>Administrator</h2>
-        <%= render 'whois', whois: admin %>
+        <%= render 'whois_form', whois: admin %>
       <% end %>
     </div>
 
     <div class="whois billing">
       <%= fields_for @domain.billing do |billing| %>
         <h2>Billing</h2>
-        <%= render 'whois', whois: billing %>
+        <%= render 'whois_form', whois: billing %>
       <% end %>
     </div>
 
     <div class="whois tech">
       <%= fields_for @domain.tech do |tech| %>
         <h2>Technical</h2>
-        <%= render 'whois', whois: tech %>
+        <%= render 'whois_form', whois: tech %>
       <% end %>
     </div>
 

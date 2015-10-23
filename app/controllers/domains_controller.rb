@@ -8,21 +8,20 @@ class DomainsController < ApplicationController
   def show
     @domain.epp = get_epp_code @domain if @domain.epp.nil? || @domain.epp.empty?
 
-    results = query @domain
+    api_query_results = query @domain
 
-    if results.success?
-      response = results.response['attributes']
+    if api_query_results.success?
+      response = api_query_results.response['attributes']
       contacts = response['contact_set']
 
-      # this method is always saving new nameservers in the database rather than
-      # updating the existing nameservers for that domain name.
-
-      # this should be updated to update existing nameservers rather than create new
-      # nameservers instead
-
-      @domain.nameservers = response['nameserver_list'].map do |ns|
-        Nameserver.new(name: ns['name'], order: ns['sortorder'], ip_address: ns['ipaddress'])
+      response['nameserver_list'].each do |ns|
+        nameserver = Nameserver.find_or_create_by(order: ns['sortorder'], domain: @domain)
+        unless nameserver.name == ns['name']
+          nameserver.name = ns['name']
+          nameserver.save
+        end
       end
+
 
       @domain.registration = DateTime.parse(response['registry_createdate'])
       @domain.expiry = DateTime.parse(response['registry_expiredate'])

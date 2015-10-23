@@ -1,37 +1,59 @@
 <div class="show domain">
   <h1><%= @domain.name %></h1>
 
+  <%= link_to 'Edit', edit_domain_path(@domain) %> |
+  <%= link_to 'Back', domains_path %>
+
   <ul class="properties">
-    <li class="registration date">
-        <strong>Registration Date:</strong>
+    <li>
+      <h2>Registration Date</h2>
+      <div class="registration">
         <%= @domain.registration.strftime('%B %d, %Y') %>
+      </div>
     </li>
-    <li class="expiry date">
-        <strong>Expiry Date:</strong>
+    <li>
+      <h2>Expiry Date</h2>
+      <div class="expiry">
         <%= @domain.expiry.strftime('%B %d, %Y') %>
-    </li>
-    <li class="lock">
-      <strong>Transfer Lock</strong>
-      <%= @domain.lock ? "On" : "Off" %>
-    </li>
-    <li class="privacy">
-      <strong>WHOIS Privacy</strong>
-      <%= @domain.privacy ? "On" : "Off" %>
+      </div>
     </li>
     <li>
-      <strong>Authorization Code</strong>
-      <%= @domain.epp %>
+      <h2>Transfer Lock</h2>
+      <div class="lock">
+        <%= @domain.lock ? "On" : "Off" %>
+      </div>
     </li>
     <li>
-      <strong>Nameservers</strong>
-      <ul>
+      <h2>WHOIS Privacy</h2>
+      <div class="privacy">
+        <%= @domain.privacy ? "On" : "Off" %>
+      </div>
+    </li>
+    <li>
+      <h2>Authorization Code</h2>
+      <div class="epp">
+        <%= @domain.epp %>
+      </div>
+    </li>
+    <li>
+      <h2>Nameservers</h2>
+      <div class="nameservers">
         <% @domain.nameservers.each do |ns| %>
-          <li><%= ns.name %></li>
+          <%= ns.name %>
+          (<%= ns.order %>)
+          <% unless @domain.nameservers.last === ns %>|<% end %>
         <% end %>
-      </ul>
+      </div>
+    </li>
+    <li>
+      <h2>Registration Records</h2>
+      <div class="records">
+        <%= render partial: 'whois_record', locals: { title: 'Owner', contact: @domain.owner } %>
+        <%= render partial: 'whois_record', locals: { title: 'Administrator', contact: @domain.admin } %>
+        <%= render partial: 'whois_record', locals: { title: 'Billing', contact: @domain.billing } %>
+        <%= render partial: 'whois_record', locals: { title: 'Technical', contact: @domain.tech } %>
+      </div>
     </li>
   </ul>
 </div>
 
-<%= link_to 'Edit', edit_domain_path(@domain) %> |
-<%= link_to 'Back', domains_path %>
