@@ -3,6 +3,9 @@
 @import 'base/base';
 @import 'neat';
 
+@import 'home';
+@import 'domain';
+
 section.container {
   @include outer-container;
   margin-top: 2rem;
@@ -13,5 +16,3 @@ h1 {
   font-size: 2.5rem;
   font-weight: bold;
 }
-
-@import 'domain';

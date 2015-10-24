@@ -1,0 +1,7 @@
+<div class="home">
+  <h1>Get Your Domain Name!</h1>
+
+  <%= form_tag new_domain_path, method: :get do %>
+    <%= text_field_tag "name", "", placeholder: "example.com", class: "search" %>
+  <% end %>
+</div>

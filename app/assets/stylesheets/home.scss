@@ -1,0 +1,13 @@
+.home {
+  h1 {
+    text-align: center;
+    margin: 10rem 0 1rem;
+  }
+
+  input {
+    font-size: 2em;
+    text-align: center;
+    @include span-columns(10 of 12);
+    @include shift(1);
+  }
+}

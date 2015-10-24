@@ -1,9 +1,9 @@
-<h1>Listing Domains</h1>
+<h1>Domains</h1>
 
 <hr>
 
 <ul>
-  <% @domains.each do |domain| %>
+  <% @domains.order(:registration).each do |domain| %>
     <li><%= link_to domain.name, domain %></li>
   <% end %>
 </ul>

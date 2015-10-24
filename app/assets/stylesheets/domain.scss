@@ -19,6 +19,10 @@ $view-domain-border: 1px solid $light-gray;
     &:first-child { margin-top: 0; }
   }
 
+  .epp pre {
+    margin: 0;
+  }
+
   .properties {
     & > li {
       @include outer-container;
@@ -27,8 +31,13 @@ $view-domain-border: 1px solid $light-gray;
       &:last-child {
         border-bottom: $view-domain-border;
       }
-      & > h2 { @include span-columns(3 of 12); }
-      & > div { @include span-columns(9 of 12); }
+      & > h2 {
+        @include span-columns(3 of 12);
+      }
+      & > div,
+      & > ul.nameservers {
+        @include span-columns(9 of 12);
+      }
     }
   }
 }

@@ -2,41 +2,57 @@ class DomainsController < ApplicationController
   before_action :set_domain, only: [:show, :edit, :update, :destroy]
 
   def index
+    get_all_domains.each { |domain| Domain.find_or_create_by(name: domain['name']) }
     @domains = Domain.all
   end
 
   def show
-    @domain.epp = get_epp_code @domain if @domain.epp.nil? || @domain.epp.empty?
-
-    api_query_results = query @domain
-
+    api_query_results = get_domain(params[:name])
     if api_query_results.success?
+      @domain.epp = get_epp_code @domain if @domain.epp.nil? || @domain.epp.empty?
       response = api_query_results.response['attributes']
-      contacts = response['contact_set']
 
-      response['nameserver_list'].each do |ns|
-        nameserver = Nameserver.find_or_create_by(order: ns['sortorder'], domain: @domain)
-        unless nameserver.name == ns['name']
+      @domain.autorenew = response['let_expire']
+      @domain.privacy = get_privacy_status @domain
+      @domain.lock = get_lock_status @domain
+
+      nameservers = response['nameserver_list']
+      nameservers.each do |ns|
+        Nameserver.find_or_create_by(order: ns['sortorder'], domain: @domain) do |nameserver|
           nameserver.name = ns['name']
-          nameserver.save
         end
       end
-
+      @domain.nameservers.where.not(order: [1..nameservers.count]).destroy_all
 
       @domain.registration = DateTime.parse(response['registry_createdate'])
       @domain.expiry = DateTime.parse(response['registry_expiredate'])
 
+      contacts = response['contact_set']
       @domain.owner.from_json(contacts['owner'])
       @domain.admin.from_json(contacts['admin'])
       @domain.billing.from_json(contacts['billing'])
       @domain.tech.from_json(contacts['tech'])
 
       @domain.save
+      render :show
+    else
+      @domain_name = params[:name]
+      if domain_available? @domain_name
+        redirect_to new_domain_path(name: @domain_name)
+      else
+        render :unavailable
+      end
     end
   end
 
   def new
     @domain = Domain.new
+
+    if params[:name] && domain_available?(params[:name])
+      @domain.name = params[:name]
+    else
+      @domain.name = Faker::Internet.domain_word + ".com"
+    end
 
     registration = {
       organization:   Faker::Company.name,
@@ -52,7 +68,6 @@ class DomainsController < ApplicationController
       phone_number:   Faker::PhoneNumber.phone_number
     }
 
-    @domain.name      = Faker::Internet.domain_word + ".com"
     @domain.owner     = Owner.new registration
     @domain.admin     = Admin.new registration
     @domain.billing   = Billing.new registration
@@ -63,7 +78,7 @@ class DomainsController < ApplicationController
   end
 
   def create
-    @domain         = Domain.new domain_params
+    @domain = Domain.new domain_params
 
     @domain.owner   = Owner.new contact_params "owner"
     @domain.admin   = Admin.new contact_params "admin"
@@ -108,6 +123,17 @@ class DomainsController < ApplicationController
       params.require(:domain).permit(:name, :lock, :privacy, :epp)
     end
 
+    def get_domain(name)
+      server.call(
+        action: 'get',
+        object: 'domain',
+        attributes: {
+          domain: name,
+          type: 'all_info'
+        }
+      )
+    end
+
     def contact_params(type)
       params
         .require(type.underscore.to_sym)
@@ -117,8 +143,8 @@ class DomainsController < ApplicationController
 
     def register(domain)
       response = server.call(
-        action:                 'SW_REGISTER',
-        object:                 'DOMAIN',
+        action:                 'sw_register',
+        object:                 'domain',
         attributes: {
           auto_renew:           '1',
           contact_set: {
@@ -142,18 +168,54 @@ class DomainsController < ApplicationController
 
     def get_epp_code(domain)
       query = server.call(
-        action: 'GET',
-        object: 'DOMAIN',
+        action: 'get',
+        object: 'domain',
         attributes: { domain: domain.name, type: 'domain_auth_info' }
       )
       query.response['attributes']['domain_auth_info']
     end
 
-    def query(domain)
+    def get_privacy_status(domain)
       query = server.call(
-        action: 'GET',
-        object: 'DOMAIN',
-        attributes: { domain: domain.name, type: 'all_info' }
+        action: 'get',
+        object: 'domain',
+        attributes: { domain: domain.name, type: 'whois_privacy_state' }
       )
+      query.response['attributes']['state'] === "enabled"
+    end
+
+    def get_lock_status(domain)
+      query = server.call(
+        action: 'get',
+        object: 'domain',
+        attributes: { domain: domain.name, type: 'status' }
+      )
+      query.response['attributes']['lock_state'] === "1"
+    end
+
+    def get_all_domains
+      min_expiry = Date.today
+      max_expiry = min_expiry + 10.years
+      query = server.call(
+        action: 'get_domains_by_expiredate',
+        object: 'domain',
+        attributes: {
+          exp_to: max_expiry.strftime("%Y-%m-%d"),
+          exp_from: min_expiry.strftime("%Y-%m-%d"),
+          state: 'active'
+        }
+      )
+      query.response['attributes']['exp_domains']
+    end
+
+    def domain_available?(name)
+      query = server.call(
+        action: 'lookup',
+        object: 'domain',
+        attributes: {
+          domain: name
+        }
+      )
+      query.response['response_code'] == "210"
     end
 end

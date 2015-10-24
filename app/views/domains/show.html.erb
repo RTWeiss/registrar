@@ -1,10 +1,13 @@
 <div class="show domain">
   <h1><%= @domain.name %></h1>
 
-  <%= link_to 'Edit', edit_domain_path(@domain) %> |
-  <%= link_to 'Back', domains_path %>
-
   <ul class="properties">
+    <li>
+      <h2>Auto Renew</h2>
+      <div class="autorenew">
+        <%= @domain.autorenew ? "Yes" : "No" %>
+      </div>
+    </li>
     <li>
       <h2>Registration Date</h2>
       <div class="registration">
@@ -32,18 +35,16 @@
     <li>
       <h2>Authorization Code</h2>
       <div class="epp">
-        <%= @domain.epp %>
+        <pre><%= @domain.epp %></pre>
       </div>
     </li>
     <li>
       <h2>Nameservers</h2>
-      <div class="nameservers">
-        <% @domain.nameservers.each do |ns| %>
-          <%= ns.name %>
-          (<%= ns.order %>)
-          <% unless @domain.nameservers.last === ns %>|<% end %>
+      <ul class="nameservers">
+        <% @domain.nameservers.order(:order).each do |ns| %>
+          <li><%= ns.name %></li>
         <% end %>
-      </div>
+      </ul>
     </li>
     <li>
       <h2>Registration Records</h2>
