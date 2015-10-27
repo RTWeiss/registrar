@@ -2,7 +2,7 @@ class DomainsController < ApplicationController
   before_action :set_domain, only: [:show, :edit, :update, :destroy]
 
   def index
-    get_all_domains.each { |domain| Domain.find_or_create_by(name: domain['name']) }
+    get_all_domains.each { |d| Domain.find_or_create_by(name: d['name']) }
     @domains = Domain.all
   end
 
@@ -48,11 +48,13 @@ class DomainsController < ApplicationController
   def new
     @domain = Domain.new
 
-    if params[:name] && domain_available?(params[:name])
+    if params[:name]
       @domain.name = params[:name]
     else
       @domain.name = Faker::Internet.domain_word + ".com"
     end
+
+    render :unavailable unless domain_available? @domain.name
 
     registration = {
       organization:   Faker::Company.name,
@@ -65,7 +67,7 @@ class DomainsController < ApplicationController
       country:        "US",
       postal_code:    Faker::Address.postcode,
       email:          Faker::Internet.email,
-      phone_number:   Faker::PhoneNumber.phone_number
+      phone_number:   Faker::Base.numerify("+1.9864434825")
     }
 
     @domain.owner     = Owner.new registration
@@ -86,7 +88,7 @@ class DomainsController < ApplicationController
     @domain.tech    = Tech.new contact_params "tech"
 
     if @domain.valid?
-      registration = register(@domain)
+      registration = register @domain
       response = registration.response['response_text']
       if registration.success?
         @domain.epp = get_epp_code @domain
@@ -112,6 +114,11 @@ class DomainsController < ApplicationController
   def destroy
     @domain.destroy
     redirect_to domains_url, notice: 'Domain was successfully destroyed.'
+  end
+
+  def unavailable
+    @domain_name = params[:name]
+    binding.pry
   end
 
   private

@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   root 'pages#home'
+  get 'domains/new/:name' => 'domains#new'
   resources :domains, param: :name, constraints: { name: /[0-z\.]+/ }
 end
 
