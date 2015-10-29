@@ -27,5 +27,6 @@ group :development, :test do
   gem 'spring'
   gem 'faker'
   gem 'rspec-rails', '~> 3.0'
+  gem 'capybara'
 end
 
