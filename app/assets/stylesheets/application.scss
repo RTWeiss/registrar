@@ -3,13 +3,18 @@
 @import 'base/base';
 @import 'neat';
 
+@import 'nav';
 @import 'home';
 @import 'domain';
 
-main {
+body > main {
   @include outer-container;
   margin-top: 2rem;
   margin-bottom: 2rem;
+}
+
+.notice, .alert {
+  text-align: center;
 }
 
 h1 {

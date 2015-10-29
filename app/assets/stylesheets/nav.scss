@@ -1,0 +1,19 @@
+$nav-link-height: 2.5rem;
+
+body > nav {
+  background: #f3f3f3;
+  border-bottom: 1px solid #e9e9e9;
+  > ul {
+    @include outer-container;
+    text-align: right;
+    li {
+      display: inline-block;
+      a {
+        display: block;
+        height: $nav-link-height;
+        line-height: $nav-link-height;
+        padding: 0 1rem;
+      }
+    }
+  }
+}
