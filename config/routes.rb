@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
-  devise_for :users
   root 'pages#home'
+  devise_for :users, controllers: {
+    registrations: 'users/registrations',
+    sessions: 'users/sessions'
+  }
+
   get 'domains/new/:name' => 'domains#new'
   resources :domains, param: :name, constraints: { name: /[0-z\.]+/ }
 end

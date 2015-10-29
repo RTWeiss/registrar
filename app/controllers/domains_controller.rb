@@ -9,12 +9,12 @@ class DomainsController < ApplicationController
   def show
     api_query_results = get_domain(params[:name])
     if api_query_results.success?
-      @domain.epp = get_epp_code @domain if @domain.epp.nil? || @domain.epp.empty?
+      @domain.epp = get_epp_code(@domain) if @domain.epp.nil? || @domain.epp.empty?
       response = api_query_results.response['attributes']
 
       @domain.autorenew = response['let_expire']
-      @domain.privacy = get_privacy_status @domain
-      @domain.lock = get_lock_status @domain
+      @domain.privacy = get_privacy_status(@domain)
+      @domain.lock = get_lock_status(@domain)
 
       nameservers = response['nameserver_list']
       nameservers.each do |ns|
@@ -37,7 +37,7 @@ class DomainsController < ApplicationController
       render :show
     else
       @domain_name = params[:name]
-      if domain_available? @domain_name
+      if domain_available?(@domain_name)
         redirect_to new_domain_path(name: @domain_name)
       else
         render :unavailable
@@ -54,7 +54,7 @@ class DomainsController < ApplicationController
       @domain.name = Faker::Internet.domain_word + ".com"
     end
 
-    render :unavailable unless domain_available? @domain.name
+    render :unavailable unless domain_available?(@domain.name)
 
     registration = {
       organization:   Faker::Company.name,
@@ -80,7 +80,7 @@ class DomainsController < ApplicationController
   end
 
   def create
-    @domain = Domain.new domain_params
+    @domain = Domain.new(domain_params)
 
     @domain.owner   = Owner.new contact_params "owner"
     @domain.admin   = Admin.new contact_params "admin"
@@ -88,17 +88,16 @@ class DomainsController < ApplicationController
     @domain.tech    = Tech.new contact_params "tech"
 
     if @domain.valid?
-      registration = register @domain
+      registration = register(@domain)
       response = registration.response['response_text']
       if registration.success?
         @domain.epp = get_epp_code @domain
         @domain.save
-        redirect_to domain_url @domain, notice: response
+        redirect_to domain_url(@domain), notice: response
       else
         render :new, alert: response
       end
     else
-      binding.pry
       render :new
     end
 
@@ -119,7 +118,6 @@ class DomainsController < ApplicationController
 
   def unavailable
     @domain_name = params[:name]
-    binding.pry
   end
 
   private

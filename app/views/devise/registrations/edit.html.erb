@@ -1,4 +1,4 @@
-<h2>Edit <%= resource_name.to_s.humanize %></h2>
+<h2>Update Account Information</h2>
 
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
   <%= devise_error_messages! %>
@@ -27,13 +27,26 @@
     <%= f.password_field :current_password, autocomplete: "off" %>
   </div>
 
+  <fieldset>
+    <%= f.fields_for resource.profile do |p| %>
+      <div class="field">
+        <%= p.label :first_name %>
+        <%= p.text_field :first_name %>
+      </div>
+
+      <div class="field">
+        <%= p.label :last_name %>
+        <%= p.text_field :last_name %>
+      </div>
+
+      <div class="field">
+        <%= p.label :organization %>
+        <%= p.text_field :organization %>
+      </div>
+    <% end %>
+  </fieldset>
+
   <div class="actions">
     <%= f.submit "Update" %>
   </div>
 <% end %>
-
-<h3>Cancel my account</h3>
-
-<p>Unhappy? <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete %></p>
-
-<%= link_to "Back", :back %>

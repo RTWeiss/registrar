@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151029040403) do
+ActiveRecord::Schema.define(version: 20151029164352) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,6 +45,24 @@ ActiveRecord::Schema.define(version: 20151029040403) do
   end
 
   add_index "nameservers", ["domain_id"], name: "index_nameservers_on_domain_id", using: :btree
+
+  create_table "profiles", force: :cascade do |t|
+    t.string  "first_name"
+    t.string  "last_name"
+    t.string  "organization"
+    t.string  "address1"
+    t.string  "address2"
+    t.string  "address3"
+    t.string  "city"
+    t.string  "state"
+    t.string  "country"
+    t.string  "postal_code"
+    t.string  "email"
+    t.string  "phone_number"
+    t.integer "user_id"
+  end
+
+  add_index "profiles", ["user_id"], name: "index_profiles_on_user_id", using: :btree
 
   create_table "registrations", force: :cascade do |t|
     t.string  "organization"
@@ -85,5 +103,6 @@ ActiveRecord::Schema.define(version: 20151029040403) do
 
   add_foreign_key "domains", "users"
   add_foreign_key "nameservers", "domains"
+  add_foreign_key "profiles", "users"
   add_foreign_key "registrations", "domains"
 end
