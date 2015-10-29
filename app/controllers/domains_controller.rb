@@ -98,6 +98,7 @@ class DomainsController < ApplicationController
         render :new, alert: response
       end
     else
+      binding.pry
       render :new
     end
 

@@ -3,5 +3,27 @@
 
   <%= link_to 'View all domains', domains_path %>
 
+  <% if @domain.errors.any? %>
+    <div class="errors">
+      <%= render partial: 'validation', collection: @domain.errors.full_messages, as: 'message' %>
+
+      <% unless @domain.owner.valid? %>
+        <%= render partial: 'validation', collection: @domain.owner.errors.full_messages, as: 'message' %>
+      <% end %>
+
+      <% unless @domain.admin.valid? %>
+        <%= render partial: 'validation', collection: @domain.admin.errors.full_messages, as: 'message' %>
+      <% end %>
+
+      <% unless @domain.billing.valid? %>
+        <%= render partial: 'validation', collection: @domain.billing.errors.full_messages, as: 'message' %>
+      <% end %>
+
+      <% unless @domain.tech.valid? %>
+        <%= render partial: 'validation', collection: @domain.tech.errors.full_messages, as: 'message' %>
+      <% end %>
+    </div>
+  <% end %>
+
   <%= render 'form' %>
 </div>

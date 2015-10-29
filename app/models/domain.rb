@@ -7,6 +7,8 @@ class Domain < ActiveRecord::Base
   has_one :billing
   has_one :tech
 
+  validates_associated :owner, :admin, :billing, :tech
+
   after_initialize do |domain|
     if domain.new_record?
       domain.build_owner

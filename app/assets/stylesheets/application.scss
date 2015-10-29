@@ -6,7 +6,7 @@
 @import 'home';
 @import 'domain';
 
-section.container {
+main {
   @include outer-container;
   margin-top: 2rem;
   margin-bottom: 2rem;

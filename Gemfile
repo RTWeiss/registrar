@@ -18,6 +18,7 @@ gem 'opensrs', '~> 0.3.6'
 gem 'figaro'
 gem 'bourbon'
 gem 'neat'
+gem 'devise', '~> 3.5', '>= 3.5.2'
 
 group :development, :test do
   gem 'byebug'

@@ -7,13 +7,20 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
+  <main>
+    <% if notice %>
+      <div class="notice">
+        <p><%= notice %></p>
+      </div>
+    <% end %>
 
-  <section class="container">
-    <% flash.each do |key, value| %>
-      <%= content_tag :div, value, class: "flash #{key}" %>
+    <% if alert %>
+      <div class="alert">
+        <p><%= alert %></p>
+      </div>
     <% end %>
 
     <%= yield %>
-  </section>
+  </main>
 </body>
 </html>

@@ -1,6 +1,9 @@
 class Registration < ActiveRecord::Base
   belongs_to :domain
 
+  validates_presence_of :first_name, :last_name, :organization, :address1,
+    :city, :state, :postal_code, :country, :phone_number, :email
+
   def as_json(options={})
     {
       first_name:   self.first_name,
