@@ -1,4 +1,8 @@
 class Domain < ActiveRecord::Base
+  belongs_to :user
+  has_many :collaborations
+  has_many :collaborators, through: :collaborations, source: :user
+
   has_many :nameservers
   has_many :glue
 
@@ -17,6 +21,10 @@ class Domain < ActiveRecord::Base
       domain.build_tech
     end
   end
+
+  # def initialize(params={})
+  #   self.collaborators = []
+  # end
 
   def to_param
     self.name
