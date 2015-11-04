@@ -56,24 +56,13 @@ class DomainsController < ApplicationController
 
     render :unavailable unless domain_available?(@domain.name)
 
-    registration = {
-      organization:   Faker::Company.name,
-      first_name:     Faker::Name.first_name,
-      last_name:      Faker::Name.last_name,
-      address1:       Faker::Address.street_address,
-      address2:       Faker::Address.secondary_address,
-      city:           Faker::Address.city,
-      state:          Faker::Address.state_abbr,
-      country:        "US",
-      postal_code:    Faker::Address.postcode,
-      email:          Faker::Internet.email,
-      phone_number:   Faker::Base.numerify("+1.9864434825")
-    }
+    registration_params = current_user.profile.serializable_hash
+    registration_params.delete('user_id')
 
-    @domain.owner     = Owner.new registration
-    @domain.admin     = Admin.new registration
-    @domain.billing   = Billing.new registration
-    @domain.tech      = Tech.new registration
+    @domain.owner     = Owner.new(registration_params)
+    @domain.admin     = Admin.new(registration_params)
+    @domain.billing   = Billing.new(registration_params)
+    @domain.tech      = Tech.new(registration_params)
   end
 
   def edit

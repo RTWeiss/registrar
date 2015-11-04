@@ -1,5 +1,6 @@
 class Domain < ActiveRecord::Base
   belongs_to :user
+
   has_many :collaborations
   has_many :collaborators, through: :collaborations, source: :user
 
@@ -11,7 +12,10 @@ class Domain < ActiveRecord::Base
   has_one :billing
   has_one :tech
 
-  validates_associated :owner, :admin, :billing, :tech
+  validates_associated :owner
+  validates_associated :admin
+  validates_associated :billing
+  validates_associated :tech
 
   after_initialize do |domain|
     if domain.new_record?
