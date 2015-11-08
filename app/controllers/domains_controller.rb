@@ -2,8 +2,8 @@ class DomainsController < ApplicationController
   before_action :set_domain, only: [:show, :edit, :update, :destroy]
 
   def index
-    get_all_domains.each { |d| Domain.find_or_create_by(name: d['name']) }
-    @domains = Domain.all
+    # get_all_domains.each { |d| Domain.find_or_create_by(name: d['name']) }
+    @domains = current_user.domains
   end
 
   def show
